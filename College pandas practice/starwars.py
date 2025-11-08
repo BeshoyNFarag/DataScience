@@ -22,19 +22,55 @@ starwars.loc[starwars["height"] < 180, "name"] --> the first input chooses the r
 starwars.loc["R2-D2"]      --> you can choose the row based on its name
 starwars.loc[:, "height"]   --> you should always pass the rows,evne if you want to choose based on the columns 
 starwars.loc["R2-D2":"Chewbacca", ["mass","homeworld"]] --> choosing rows and column ranges
-
-
 starwars["BMI"] = starwars["mass"] / (starwars["height"]/100)**2  --> we can just create a new column by selecting it
 using this ["name"] then assign =  a value to it.
 starwars["col1"] = 7  --> here we assing a value to an entire column
 starwars["col2"] = np.random.randint(0,100, starwars.shape[0]) --> creating a random value for each column
 starwars = starwars.drop(columns=["col1","col2"]) --> deleting entire columns
 starwars_renamed = starwars.rename(columns={"eye_color":"Augenfarbe","sex":"Geschlecht"}) --> rename by just renaming
+starwars.sort_values(by="column_name", ascending =True or false) --> this helps ascendingly or descindengly ordered using column name
+starwars.sort_values(by=["jedi", "height"], ascending=[True, False]) --> sorting using 2 columns
+starwars.sort_values("height", ignore_index=True) --> during normal sort the index remain attached to its main value
+this ignore_index = True resets the index to zero
+starwars["mass"].mean() --> we can return the mean of an entire column
+starwars[["mass", "height"]].max() --> returns the mean of 2 columns
+starwars.groupby("eye_color")["height"].mean() --> we can group by the uniqeness of any value of a column, then we can 
+choose another column and aggregate it
+starwars.groupby("eye_color")[["height", "mass"]].mean() --> we can aggregate more than one column using the same group
+starwars["sex"].value_counts() --> count how many times a certain unique value appear on the column
+
+
+pd.merge(left=students, right = names, how = "left", left_on = "degree program", right_on = "short name") --> this is
+to merge 2 tables, left addressing one dataframe and right is the otherone, how ="left,rigth,inner,outer" 
+left means the matching of right to left will be added and if nothing matches we keep the data from left and fill the
+rest with NaN. Right is just the opposite giving the right the main character.
+Inner only joins the common data and outer keeps all rows from both tables, filling NaN where no match exists.
+left_on and right_on indicates the values or column names that should be joined based on
+
+
+
 
 
 
 ###end Pandas notes###
-
+plt.plot(arrayx, arrayy) --> this here is a line chart with x and y axis both as an array input
+plt.show() --> wihtout this funtion you can really see nothing
+plt.plot(arrayx, arrayy, marker = "character") --> this marker keywoard would make the point on the char as the line
+plt.plot(arrayx, arrayy, marker = "character", markersize=10) --> this sets the point mark as something
+plt.plot(arrayx, arrayy, markerfacecolor = "color") --> this sets the color of the line chart's points
+plt.plot(arrayx, arrayy, markeredgecolor = "color") --> this sets the color of the line chart's outer points
+plt.plot(arrayx, arrayy, linestyle = "dashed") --> the line chart style
+plt.plot(arrayx, arrayy, linewidth = 2) --> this doubles the line size
+plt.plot(arrayx, arrayy, color = "some color") --> this is for the color of the line
+starwars.plot.scatter(x="height", y="mass", c="BMI", colormap="viridis", title="Star Wars") --> a scatter plot is 
+a 2D graph that represents a relation between 2 values as dots. the x = "height" is the column for values this sets the x
+title and value, the y = "mass" does the same for the y access. c="BMI" means the color follows the BMI value of numbers
+title= "sets the title", s= some number sets the size of the dots. 
+plot.scatter(marker= "x") --> makes the dots looks as x instead of dots
+plot.scatter(edgecolor="blue", linewidth= number, alpha = number between 0 and 1) --> this gives an edge of color blue
+with widht of number and the alpha makes the color a bit see through
+for idx, row in starwars.iterrows():
+    ax.annotate(row["name"], (row["height"], row["mass"])) --> annotates the name on the point god knows how
 ###start matplot lib notes###
 '''
 
@@ -43,8 +79,18 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-arrayx = np.array([10, 20, 30, 50, 60])
-arrayy = np.array([140, 240, 340, 540, 460])
+starwars = pd.read_csv(
+    "E:\Year 2 college\Data Science\DataScience\College pandas practice\starwars.csv")
+starwars["BMI"] = (starwars["mass"] / 100) / (starwars["height"] ** 2)
 
-plt.plot(arrayx, arrayy)
-plt.show()
+starwars = starwars.set_index("name", drop=False)
+
+df1 = starwars[starwars["sex"] == "male"]
+df2 = starwars[starwars["sex"] != "male"]
+
+df3 = pd.concat([df1, df2])
+
+print(df1)
+print(df2)
+
+print(df3)
